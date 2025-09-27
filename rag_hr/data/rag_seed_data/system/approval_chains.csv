@@ -1,0 +1,10 @@
+request_type,threshold_rule,level_1,level_2,level_3
+leave,always,Manager,HR,
+expense,amount<=50000,Manager,,
+expense,amount>50000,Manager,Director,
+overtime,always,Manager,HR,
+official_duty,always,Manager,HR,
+promotion,always,Manager,HR,Director
+transfer,always,Manager,HR,Director
+resignation,always,Manager,HR,Director
+travel,always,Manager,HR,

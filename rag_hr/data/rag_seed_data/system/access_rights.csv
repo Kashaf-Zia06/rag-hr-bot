@@ -1,0 +1,10 @@
+role,resource,permission
+Employee,chatbot,query
+Employee,attendance:self,read
+Employee,requests:self,"create,read"
+Manager,attendance:team,"read,export"
+Manager,requests:team,"approve,reject,comment"
+HR,policies,"create,update"
+HR,employee_data,"create,update"
+Director,requests:org,approve
+Director,reports,read

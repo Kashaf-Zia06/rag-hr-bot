@@ -1,0 +1,21 @@
+# Workflows (seed)
+leave_request:
+  steps:
+    - submit: employee
+    - approve: manager (SLA 2d)
+    - approve: hr (SLA 2d; if exceptional)
+    - notify: employee
+
+expense_claim:
+  steps:
+    - submit: employee
+    - approve: manager
+    - approve: director (if amount > 50000)
+    - reimburse: finance
+
+attendance:
+  steps:
+    - check_in: employee
+    - check_out: employee
+    - flag_late: system
+    - approve_overtime: manager

@@ -1,0 +1,121 @@
+request_id,employee_id,type,amount,submitted_on,status,current_approver_id,comments
+R5000,E1056,overtime,,2025-08-28,Pending,E1018,
+R5001,E1025,transfer,,2025-08-13,Rejected,E1047,Escalated to HR
+R5002,E1035,overtime,,2025-09-21,Approved,E1026,Escalated to HR
+R5003,E1047,expense,75000,2025-07-31,Approved,E1060,Approved as per policy
+R5004,E1080,transfer,,2025-09-07,Approved,E1060,Insufficient documentation
+R5005,E1083,transfer,,2025-09-21,Approved,E1071,Approved as per policy
+R5006,E1061,official_duty,,2025-09-22,Pending,E1039,
+R5007,E1066,official_duty,,2025-08-14,Approved,E1068,Approved as per policy
+R5008,E1015,relaxation,,2025-08-02,Approved,E1072,Insufficient documentation
+R5009,E1009,travel,,2025-09-12,Pending,E1078,
+R5010,E1013,expense,1800,2025-09-03,Rejected,E1060,Insufficient documentation
+R5011,E1099,transfer,,2025-08-05,Approved,E1029,Insufficient documentation
+R5012,E1008,overtime,,2025-08-24,Approved,E1029,Requires Director approval
+R5013,E1056,overtime,,2025-09-04,Approved,E1018,Insufficient documentation
+R5014,E1078,transfer,,2025-08-14,Approved,E1029,Insufficient documentation
+R5015,E1012,expense,1200,2025-08-09,Pending,E1072,
+R5016,E1044,transfer,,2025-08-30,Pending,E1078,
+R5017,E1031,overtime,,2025-09-09,Approved,E1039,Insufficient documentation
+R5018,E1076,resignation,,2025-08-19,Approved,E1060,Escalated to HR
+R5019,E1084,leave,,2025-08-01,Pending,E1068,
+R5020,E1077,resignation,,2025-08-25,Pending,E1047,
+R5021,E1037,transfer,,2025-08-16,Pending,E1080,
+R5022,E1063,official_duty,,2025-09-02,Pending,E1060,
+R5023,E1081,travel,,2025-08-19,Pending,E1068,
+R5024,E1046,leave,,2025-07-29,Pending,E1078,
+R5025,E1072,transfer,,2025-08-31,Pending,E1060,
+R5026,E1097,overtime,,2025-08-27,Rejected,E1068,Approved as per policy
+R5027,E1075,leave,,2025-09-22,Pending,E1078,
+R5028,E1005,official_duty,,2025-07-29,Pending,E1039,
+R5029,E1064,transfer,,2025-09-08,Approved,E1047,Requires Director approval
+R5030,E1054,transfer,,2025-08-13,Approved,E1080,Requires Director approval
+R5031,E1078,resignation,,2025-09-17,Pending,E1029,
+R5032,E1010,promotion,,2025-08-25,Rejected,E1078,Insufficient documentation
+R5033,E1041,resignation,,2025-09-01,Approved,E1060,Approved as per policy
+R5034,E1089,promotion,,2025-08-30,Approved,E1071,Insufficient documentation
+R5035,E1031,leave,,2025-09-21,Rejected,E1039,Approved as per policy
+R5036,E1078,travel,,2025-08-19,Pending,E1029,
+R5037,E1015,overtime,,2025-09-26,Approved,E1072,Approved as per policy
+R5038,E1063,overtime,,2025-09-04,Approved,E1060,Escalated to HR
+R5039,E1047,overtime,,2025-09-18,Approved,E1060,Escalated to HR
+R5040,E1098,expense,500,2025-09-05,Approved,E1073,Escalated to HR
+R5041,E1008,resignation,,2025-09-10,Approved,E1029,Requires Director approval
+R5042,E1063,expense,25000,2025-08-25,Pending,E1060,
+R5043,E1072,travel,,2025-09-16,Pending,E1060,
+R5044,E1098,promotion,,2025-09-20,Rejected,E1073,Approved as per policy
+R5045,E1094,official_duty,,2025-08-25,Pending,E1080,
+R5046,E1031,leave,,2025-09-24,Approved,E1039,Within limit
+R5047,E1022,overtime,,2025-07-29,Rejected,E1078,Approved as per policy
+R5048,E1091,resignation,,2025-08-10,Approved,E1072,Insufficient documentation
+R5049,E1031,relaxation,,2025-08-31,Rejected,E1039,Escalated to HR
+R5050,E1009,promotion,,2025-08-21,Pending,E1078,
+R5051,E1086,resignation,,2025-07-31,Pending,E1029,
+R5052,E1066,official_duty,,2025-09-24,Rejected,E1068,Approved as per policy
+R5053,E1036,travel,,2025-08-08,Approved,E1073,Escalated to HR
+R5054,E1070,expense,25000,2025-09-26,Pending,E1018,
+R5055,E1072,promotion,,2025-08-07,Pending,E1060,
+R5056,E1059,official_duty,,2025-09-03,Approved,E1018,Within limit
+R5057,E1093,official_duty,,2025-07-31,Approved,E1026,Insufficient documentation
+R5058,E1000,overtime,,2025-07-29,Approved,E1047,Insufficient documentation
+R5059,E1044,resignation,,2025-08-17,Approved,E1078,Approved as per policy
+R5060,E1000,relaxation,,2025-08-09,Approved,E1047,Escalated to HR
+R5061,E1026,expense,52000,2025-09-11,Approved,E1029,Approved as per policy
+R5062,E1091,overtime,,2025-09-09,Pending,E1072,
+R5063,E1066,official_duty,,2025-08-31,Approved,E1068,Escalated to HR
+R5064,E1095,travel,,2025-09-21,Approved,E1068,Requires Director approval
+R5065,E1081,overtime,,2025-08-05,Pending,E1068,
+R5066,E1055,leave,,2025-08-15,Rejected,E1071,Insufficient documentation
+R5067,E1033,promotion,,2025-08-03,Pending,E1078,
+R5068,E1089,transfer,,2025-08-04,Approved,E1071,Escalated to HR
+R5069,E1034,travel,,2025-09-12,Pending,E1078,
+R5070,E1017,official_duty,,2025-08-08,Approved,E1072,Approved as per policy
+R5071,E1013,overtime,,2025-09-16,Approved,E1060,Escalated to HR
+R5072,E1015,transfer,,2025-08-23,Pending,E1072,
+R5073,E1057,official_duty,,2025-09-07,Approved,E1047,Approved as per policy
+R5074,E1020,expense,75000,2025-09-07,Approved,E1071,Requires Director approval
+R5075,E1027,leave,,2025-08-04,Rejected,E1060,Insufficient documentation
+R5076,E1091,expense,1200,2025-09-04,Pending,E1072,
+R5077,E1086,leave,,2025-09-07,Pending,E1029,
+R5078,E1003,overtime,,2025-09-01,Rejected,E1073,Requires Director approval
+R5079,E1031,resignation,,2025-09-20,Approved,E1039,Insufficient documentation
+R5080,E1001,expense,500,2025-08-04,Approved,E1068,Insufficient documentation
+R5081,E1025,overtime,,2025-08-05,Approved,E1047,Approved as per policy
+R5082,E1009,promotion,,2025-09-25,Rejected,E1078,Insufficient documentation
+R5083,E1016,travel,,2025-09-21,Rejected,E1072,Escalated to HR
+R5084,E1005,expense,25000,2025-09-23,Pending,E1039,
+R5085,E1092,transfer,,2025-09-01,Approved,E1047,Within limit
+R5086,E1022,transfer,,2025-09-04,Pending,E1078,
+R5087,E1035,overtime,,2025-09-09,Approved,E1026,Insufficient documentation
+R5088,E1078,leave,,2025-08-18,Approved,E1029,Escalated to HR
+R5089,E1052,travel,,2025-08-01,Approved,E1029,Approved as per policy
+R5090,E1035,expense,25000,2025-09-18,Approved,E1026,Requires Director approval
+R5091,E1080,official_duty,,2025-08-06,Approved,E1060,Approved as per policy
+R5092,E1091,transfer,,2025-09-04,Approved,E1072,Within limit
+R5093,E1072,relaxation,,2025-08-25,Pending,E1060,
+R5094,E1023,promotion,,2025-09-25,Pending,E1068,
+R5095,E1003,official_duty,,2025-07-31,Approved,E1073,Escalated to HR
+R5096,E1060,leave,,2025-08-24,Pending,E1073,
+R5097,E1020,official_duty,,2025-09-20,Pending,E1071,
+R5098,E1034,official_duty,,2025-08-23,Approved,E1078,Approved as per policy
+R5099,E1073,official_duty,,2025-08-03,Rejected,E1060,Within limit
+R5100,E1022,relaxation,,2025-09-15,Pending,E1078,
+R5101,E1094,relaxation,,2025-08-13,Pending,E1080,
+R5102,E1090,leave,,2025-08-13,Pending,E1060,
+R5103,E1072,overtime,,2025-09-14,Approved,E1060,Within limit
+R5104,E1039,resignation,,2025-09-15,Approved,E1029,Approved as per policy
+R5105,E1029,leave,,2025-08-19,Pending,E1072,
+R5106,E1000,travel,,2025-09-05,Rejected,E1047,Insufficient documentation
+R5107,E1043,overtime,,2025-08-12,Pending,E1060,
+R5108,E1007,relaxation,,2025-09-25,Pending,E1068,
+R5109,E1099,overtime,,2025-09-19,Approved,E1029,Escalated to HR
+R5110,E1047,expense,75000,2025-08-15,Pending,E1060,
+R5111,E1043,expense,1800,2025-09-06,Pending,E1060,
+R5112,E1093,overtime,,2025-08-30,Approved,E1026,Within limit
+R5113,E1022,relaxation,,2025-08-12,Rejected,E1078,Requires Director approval
+R5114,E1028,relaxation,,2025-08-15,Approved,E1026,Insufficient documentation
+R5115,E1039,transfer,,2025-08-11,Approved,E1029,Insufficient documentation
+R5116,E1093,overtime,,2025-09-26,Rejected,E1026,Requires Director approval
+R5117,E1098,transfer,,2025-08-21,Pending,E1073,
+R5118,E1078,relaxation,,2025-09-12,Approved,E1029,Approved as per policy
+R5119,E1018,travel,,2025-09-05,Approved,E1029,Insufficient documentation

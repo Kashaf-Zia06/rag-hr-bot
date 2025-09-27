@@ -1,0 +1,15 @@
+project_id,project_name,deadline,milestones,status,budget_pkr
+P200,Project A,2026-02-28,5,At Risk,3721307
+P201,Project B,2025-11-01,5,Delayed,6960015
+P202,Project C,2025-12-29,6,Delayed,14040385
+P203,Project D,2026-01-29,4,Delayed,9447546
+P204,Project E,2026-01-09,6,On Track,14193922
+P205,Project F,2026-05-22,5,Delayed,9297090
+P206,Project G,2025-12-21,8,On Track,3258981
+P207,Project H,2026-04-01,8,At Risk,8095349
+P208,Project I,2026-02-20,8,Delayed,4684131
+P209,Project J,2025-10-19,4,Delayed,13376443
+P210,Project K,2026-04-30,6,On Track,4117788
+P211,Project L,2025-10-29,4,Delayed,8145971
+P212,Project M,2026-01-12,6,Delayed,2543335
+P213,Project N,2026-03-15,4,Delayed,9548448

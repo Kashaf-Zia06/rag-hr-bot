@@ -1,0 +1,5 @@
+role,description
+Employee,Standard user; self-service requests
+Manager,Leads a team; first-level approver
+HR,Policy admin; secondary approver; data steward
+Director,Senior approver; strategic reporting

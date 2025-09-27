@@ -1,0 +1,13 @@
+employee_id,name,role,department,email
+E1018,Fatima Farooq,Manager,Admin,fatima.farooq@examplecorp.local
+E1026,Mahnoor Malik,Manager,Finance,mahnoor.malik@examplecorp.local
+E1029,Shehroz Gul,Director,Support,shehroz.gul@examplecorp.local
+E1039,Junaid Ali,Manager,Operations,junaid.ali@examplecorp.local
+E1047,Minahil Ahmed,Manager,Finance,minahil.ahmed@examplecorp.local
+E1060,Saad Gul,Director,IT,saad.gul@examplecorp.local
+E1068,Murtaza Malik,Manager,HR,murtaza.malik@examplecorp.local
+E1071,Anaya Ali,Manager,Sales,anaya.ali@examplecorp.local
+E1072,Dua Khan,Manager,Marketing,dua.khan@examplecorp.local
+E1073,Anas Sheikh,Manager,Marketing,anas.sheikh@examplecorp.local
+E1078,Shahzaib Khan,Manager,Procurement,shahzaib.khan@examplecorp.local
+E1080,Laiba Raza,Manager,Finance,laiba.raza@examplecorp.local
