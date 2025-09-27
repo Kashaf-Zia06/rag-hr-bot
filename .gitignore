@@ -1,0 +1,6 @@
+.venv/
+*.zip
+*.tar.gz
+*.pkl
+*.faiss
+__pycache__/
