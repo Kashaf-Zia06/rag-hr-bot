@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import os
 import csv
 from datetime import datetime
@@ -66,17 +66,20 @@ def validate_signup(email, emp_id, role):
                 return True
     return False
 
-def add_employee_to_csv(name, email, emp_id, role):
+def add_employee_to_csv(employee_id, name, email, phone, role, department, location, joining_date, employment_type, manager_id):
     exists = False
     with open('rag_hr/data/rag_seed_data/data/employees.csv') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if row['email'] == email and row['employee_id'] == emp_id:
+            if row['email'] == email or row['employee_id'] == employee_id:
                 exists = True
                 break
     if not exists:
-        with open('rag_hr/data/rag_seed_data/data/employees.csv', 'a') as f:
-            f.write(f"{emp_id},{name},{email},,,{role},,,,,\n")
+        with open('rag_hr/data/rag_seed_data/data/employees.csv', 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([employee_id, name, email, phone, role, department, location, joining_date, employment_type, manager_id])
+        return True
+    return False
 
 def classify_request(details):
     """
@@ -190,50 +193,63 @@ def get_approval_chain(req_type):
 
 @app.route('/', methods=['GET', 'POST'])
 def select_role():
-    if request.method == 'POST':
-        role = request.form.get('role')
-        session['selected_role'] = role
-        return redirect(url_for('role_login'))
-    return render_template('select_role.html', roles=roles)
+    # Redirect directly to login since role is determined from CSV
+    return redirect(url_for('role_login'))
 
 @app.route('/role_login', methods=['GET', 'POST'])
 def role_login():
     error = None
-    role = session.get('selected_role')
-    if not role:
-        return redirect(url_for('select_role'))
     if request.method == 'POST':
         email = request.form['email']
         emp_id = request.form.get('employee_id')
-        # Only match email and employee_id in employees.csv
-        valid_employee = bool(get_employee_by_email_and_id(email, emp_id))
-        if not valid_employee:
-            error = 'Invalid email or employee ID.'
+        
+        # Get employee data from CSV
+        employee_data = get_employee_by_email_and_id(email, emp_id)
+        if not employee_data:
+            flash('Invalid email or employee ID. Please check your credentials and try again.', 'error')
         else:
-            session['user'] = {'email': email, 'role': role}
-            session['role'] = role
+            # Set session with data from employees.csv
+            session['user'] = {
+                'email': email, 
+                'name': employee_data['name'],
+                'role': employee_data['role']
+            }
+            session['role'] = employee_data['role']
             session['employee_id'] = emp_id
             return redirect(url_for('dashboard'))
-    return render_template('login.html', error=error, role=role)
+    return render_template('login.html', error=error)
 
 @app.route('/role_signup', methods=['GET', 'POST'])
 def role_signup():
-    role = session.get('selected_role')
     error = None
-    if not role:
-        return redirect(url_for('select_role'))
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        emp_id = request.form.get('employee_id')
-        if get_user(email):
+        # Get all form data
+        employee_id = request.form.get('employee_id', '').strip()
+        name = request.form.get('name', '').strip()
+        email = request.form.get('email', '').strip()
+        phone = request.form.get('phone', '').strip()
+        role = request.form.get('role', '').strip()
+        department = request.form.get('department', '').strip()
+        location = request.form.get('location', '').strip()
+        joining_date = request.form.get('joining_date', '').strip()
+        employment_type = request.form.get('employment_type', '').strip()
+        manager_id = request.form.get('manager_id', '').strip()
+        
+        # Validate all fields are provided
+        if not all([employee_id, name, email, phone, role, department, location, joining_date, employment_type, manager_id]):
+            error = 'All fields are required. Please fill in all information.'
+        elif get_user(email):
             error = 'Email already registered.'
-        elif not validate_signup(email, emp_id, role):
-            add_employee_to_csv(name, email, emp_id, role)
-        save_user(name, email, password, role)
-        return redirect(url_for('role_login'))
-    return render_template('signup.html', error=error, role=role)
+        else:
+            # Try to add employee to CSV
+            success = add_employee_to_csv(employee_id, name, email, phone, role, department, location, joining_date, employment_type, manager_id)
+            if success:
+                # Save user without password
+                save_user(name, email, '', role)
+                return redirect(url_for('role_login'))
+            else:
+                error = 'Employee ID or Email already exists in the system.'
+    return render_template('signup.html', error=error)
 
 @app.route('/dashboard')
 def dashboard():

@@ -10,9 +10,9 @@ def call_llm(prompt: str):
     import os, json
     from dotenv import load_dotenv
     load_dotenv()
-    if os.getenv("USE_GROQ", "0") == "1":
+    if os.getenv("USE_GROQ", "1") == "1":
         from groq import Groq
-        api_key = os.getenv("GROQ_API_KEY")
+        api_key = os.getenv("GROQ_API_KEY", "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")
         if not api_key or api_key == "your_groq_api_key_here":
             return "[LLM ERROR] Please set a valid GROQ_API_KEY in your .env file or disable USE_GROQ."
         try:
@@ -102,8 +102,8 @@ Instructions:
 
 def retrieve_hr_answer(question, k=6):
     import faiss, pickle
-    index_path = 'utils/vectorstore/index.faiss'
-    meta_path = 'utils/vectorstore/index.faiss.meta.pkl'
+    index_path = 'rag_hr/vectorstore/index.faiss'
+    meta_path = 'rag_hr/vectorstore/index.faiss.meta.pkl'
     index = faiss.read_index(index_path)
     with open(meta_path, 'rb') as f:
         docs = pickle.load(f)
@@ -126,10 +126,7 @@ def retrieve_hr_answer(question, k=6):
         context_blocks.append(f"[Source: {src}]\n{docs[idx]['text']}")
         citations.append(src)
     context = "\n\n---\n\n".join(context_blocks[:k])
-    prompt = f"""You are an HR assistant for an internal system.
-Answer the user's question using ONLY the following context. Be specific and extract exact details from the context.
-Do NOT include citations in brackets within your answer. The sources will be listed separately.
-If the answer isn't contained in the context, say "I don't know based on the indexed policies/data."
+    prompt = f"""You are an HR assistant. Answer the user's question using ONLY the provided context. Be direct and specific.
 
 Question: {question}
 
@@ -137,11 +134,13 @@ Context:
 {context}
 
 Instructions:
-- Extract specific numbers, dates, and details from the context
-- Provide direct answers with exact information when available
-- Don't say "I don't have information" if the details are clearly in the context
-- Write a clean answer without any [source: filename] citations in the text
-"""
+- If the answer is clearly in the context, provide it directly with exact details
+- Extract specific numbers, dates, and policies from the context
+- Do NOT say "not mentioned" or "not available" if the information is clearly present
+- Focus on the most relevant information for the question
+- Be concise and factual
+
+Answer:"""
     answer = call_llm(prompt)
     return answer, citations
 

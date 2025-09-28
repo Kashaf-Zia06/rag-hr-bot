@@ -13,16 +13,60 @@
     <div class="container">
         <h2>Sign Up {% if role %} ({{ role }}) {% endif %}</h2>
         <form method="POST">
-            <input type="text" name="name" placeholder="Name" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="text" name="employee_id" placeholder="Employee ID" required>
-            <input type="hidden" name="role" value="{{ role }}">
+            <input type="text" name="employee_id" placeholder="Employee ID (e.g., E1001)" required>
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+            <select name="role" required>
+                <option value="">Select Role</option>
+                <option value="Employee">Employee</option>
+                <option value="Manager">Manager</option>
+                <option value="HR">HR</option>
+                <option value="Director">Director</option>
+            </select>
+            <select name="department" required>
+                <option value="">Select Department</option>
+                <option value="HR">HR</option>
+                <option value="IT">IT</option>
+                <option value="Finance">Finance</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Sales">Sales</option>
+                <option value="Admin">Admin</option>
+            </select>
+            <select name="location" required>
+                <option value="">Select Location</option>
+                <option value="Karachi">Karachi</option>
+                <option value="Lahore">Lahore</option>
+                <option value="Islamabad">Islamabad</option>
+                <option value="Rawalpindi">Rawalpindi</option>
+                <option value="Peshawar">Peshawar</option>
+                <option value="Quetta">Quetta</option>
+                <option value="Multan">Multan</option>
+            </select>
+            <input type="date" name="joining_date" placeholder="Joining Date" required>
+            <select name="employment_type" required>
+                <option value="">Select Employment Type</option>
+                <option value="Full-Time">Full-Time</option>
+                <option value="Contract">Contract</option>
+                <option value="Intern">Intern</option>
+            </select>
+            <input type="text" name="manager_id" placeholder="Manager ID (e.g., E1047)" required>
             <button type="submit">Sign Up</button>
         </form>
         <p>Already have an account? <a href="{{ url_for('role_login') }}">Login</a></p>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div style="color:red; margin-top:10px; padding:15px; background-color:#ffe6e6; border:2px solid #ff0000; border-radius:4px; font-weight:bold; text-align:center;">⚠️ {{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Legacy error display -->
         {% if error %}
-        <div style="color:red; margin-top:10px;">{{ error }}</div>
+        <div style="color:red; margin-top:10px; padding:15px; background-color:#ffe6e6; border:2px solid #ff0000; border-radius:4px; font-weight:bold; text-align:center;">⚠️ {{ error }}</div>
         {% endif %}
     </div>
 </body>
