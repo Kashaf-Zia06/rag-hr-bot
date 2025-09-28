@@ -1,0 +1,12 @@
+email,req_type,details,status
+kashaf123@gmail.com,Leave,I want leave for 2 days as i am sick,Pending
+sara.ali@examplecorp.local,Overtime,i want pay for overtime on friday night.,Pending
+babar@examplecorp.local,Leave,I want 2 days leave,Pending
+sara.malik@examplecorp.local,Leave,I want 2 days leave,Pending (Manager > HR)
+saad.ahmed@examplecorp.local,I want to go abroad thats why i want one week off.,other,Pending (),HR
+sara.shah@examplecorp.local,I need to go out of city due to family emergency.I want 2 days leave.,leave,Pending (Manager > HR),Manager
+nimra.khan@examplecorp.local,I m facing some serious financial issues that why i need some loan amount of 10000.,other,Pending (),HR
+saad.ahmed@examplecorp.local,I need to go abroad in emergency due to my close friend's death so i need one week off.,other,Pending (),HR
+hiba.butt@examplecorp.local,I want leave for one week.,other,Pending (),HR
+saad.ahmed@examplecorp.local,I need to go hospital in emergency.I want 3 days leave.,other,Pending (),HR
+saad.ahmed@examplecorp.local,I need to go hospital in emergency.I want 3 days leave.,other,Pending (),HR

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Analytics Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 900px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        .chart { margin: 40px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>HR Analytics Dashboard</h2>
+        <div class="chart">
+            <h3>Requests by Type</h3>
+            <div id="requestsChart"></div>
+        </div>
+        <div class="chart">
+            <h3>Employee Performance Scores</h3>
+            <div id="performanceChart"></div>
+        </div>
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+    <script>
+        // Requests by Type
+        var requestTypes = {{ request_types|tojson }};
+        var requestCounts = {{ request_counts|tojson }};
+        Plotly.newPlot('requestsChart', [{
+            x: requestTypes,
+            y: requestCounts,
+            type: 'bar',
+            marker: {color: 'rgba(55,128,191,0.7)'}
+        }], {title: 'Requests by Type'});
+
+        // Performance Scores
+        var perfNames = {{ perf_names|tojson }};
+        var perfScores = {{ perf_scores|tojson }};
+        Plotly.newPlot('performanceChart', [{
+            x: perfNames,
+            y: perfScores,
+            type: 'bar',
+            marker: {color: 'rgba(50,171,96,0.7)'}
+        }], {title: 'Employee Performance Scores'});
+    </script>
+</body>
+</html>

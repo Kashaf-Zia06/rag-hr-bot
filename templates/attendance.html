@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 700px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background: #f0f0f0; }
+        .msg { margin: 15px 0; color: green; }
+        .actions { margin-top: 20px; }
+        button { padding: 10px 20px; margin-right: 10px; }
+        .no-records { color: #888; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Attendance ({{ role }})</h2>
+        <div class="actions">
+            <form method="POST" style="display:inline;">
+                <input type="hidden" name="action" value="check_in">
+                <button type="submit">Check In</button>
+            </form>
+            <form method="POST" style="display:inline;">
+                <input type="hidden" name="action" value="check_out">
+                <button type="submit">Check Out</button>
+            </form>
+        </div>
+        {% if message %}
+        <div class="msg">{{ message }}</div>
+        {% endif %}
+        <h3>Your Attendance History</h3>
+        {% if attendance_records and attendance_records|length > 0 %}
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th>Late Arrival</th>
+                <th>Overtime Hours</th>
+                <th>Status</th>
+            </tr>
+            {% for row in attendance_records %}
+            <tr>
+                <td>{{ row.date }}</td>
+                <td>{{ row.check_in }}</td>
+                <td>{{ row.check_out }}</td>
+                <td>{{ row.late_arrival }}</td>
+                <td>{{ row.overtime_hours }}</td>
+                <td>{{ row.status }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="no-records">No attendance records found.</div>
+        {% endif %}
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

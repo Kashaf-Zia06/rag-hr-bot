@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analytics & Reporting</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 1100px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        .chart { margin: 40px 0; }
+        .desc { font-size: 1.1em; color: #555; margin-bottom: 10px; }
+        .perf-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .perf-table th, .perf-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        .perf-table th { background: #f0f0f0; }
+        .mini-chart { width: 120px; height: 60px; display: inline-block; }
+        .search-form { margin-bottom: 30px; }
+        .search-input { padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; }
+        .search-btn { padding: 6px 16px; border-radius: 4px; background: #0074D9; color: #fff; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Analytics & Reporting ({{ role }})</h2>
+        <form class="search-form" method="get" action="{{ url_for('analytics') }}">
+            <label for="search_id">Search Employee ID:</label>
+            <input type="text" name="search_id" id="search_id" class="search-input" placeholder="Enter Employee ID" value="{{ search_id or '' }}">
+            <button type="submit" class="search-btn">Search</button>
+            {% if search_id %}<a href="{{ url_for('analytics') }}" style="margin-left:20px;">Clear</a>{% endif %}
+        </form>
+        {% if not search_id %}
+        <div class="chart">
+            <div class="desc">Attendance: Days present per employee.</div>
+            <div id="attendanceChart"></div>
+        </div>
+        <div class="chart">
+            <div class="desc">Grouped chart: Employee IDs vs. their request status (Approved, Pending, Cancelled).</div>
+            <div id="groupedEmpChart"></div>
+        </div>
+        <div class="chart">
+            <div class="desc">Pie chart showing the overall distribution of request statuses.</div>
+            <div id="statusPieChart"></div>
+        </div>
+        {% endif %}
+        {% if searched_employee and employee_attendance %}
+        <div class="chart">
+            <div class="desc">Attendance for employee ID: <b>{{ searched_employee.employee_id }}</b></div>
+            <div id="employeeAttendanceChart"></div>
+        </div>
+        {% endif %}
+        <div class="chart">
+            <div class="desc">Employee performance scores. Each employee has a mini bar chart for their score. Green bars indicate above-average performers, red bars below average.</div>
+            <table class="perf-table">
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Task Completion Rate</th>
+                    <th>Hours Logged</th>
+                    <th>Contribution Score</th>
+                    <th>Performance Chart</th>
+                </tr>
+                {% if searched_employee %}
+                <tr>
+                    <td>{{ searched_employee.employee_id }}</td>
+                    <td>{{ searched_employee.task_completion_rate }}</td>
+                    <td>{{ searched_employee.hours_logged }}</td>
+                    <td>{{ searched_employee.contribution_score }}</td>
+                    <td><div id="miniChart0" class="mini-chart"></div></td>
+                </tr>
+                {% elif perf_data %}
+                {% for emp in perf_data %}
+                <tr>
+                    <td>{{ emp.employee_id }}</td>
+                    <td>{{ emp.task_completion_rate }}</td>
+                    <td>{{ emp.hours_logged }}</td>
+                    <td>{{ emp.contribution_score }}</td>
+                    <td><div id="miniChart{{ loop.index0 }}" class="mini-chart"></div></td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+        {% if searched_employee and employee_requests %}
+        <div class="chart">
+            <div class="desc">Request status for employee ID: <b>{{ searched_employee.employee_id }}</b></div>
+            <table class="perf-table">
+                <tr>
+                    <th>Request Type</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+                {% for req in employee_requests %}
+                <tr>
+                    <td>{{ req.request_type }}</td>
+                    <td>{{ req.status }}</td>
+                    <td>{{ req.date or 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+    <script>
+        {% if not search_id %}
+        // Attendance Chart for all employees
+        var attSummary = {{ attendance_summary|tojson }};
+        var attEmpIds = Object.keys(attSummary);
+        var attCounts = attEmpIds.map(function(eid) { return attSummary[eid]; });
+        Plotly.newPlot('attendanceChart', [{
+            x: attEmpIds,
+            y: attCounts,
+            type: 'bar',
+            marker: {color: '#0074D9'},
+            name: 'Days Present'
+        }], {
+            title: 'Attendance: Days Present per Employee',
+            xaxis: {title: 'Employee ID'},
+            yaxis: {title: 'Days Present'}
+        });
+        // Grouped Bar Chart for Requests by Employee ID and Status
+        var empIds = Object.keys({{ grouped_emp_status|tojson }});
+        var groupedEmp = {{ grouped_emp_status|tojson }};
+        var statusLabels = ['Approved', 'Pending', 'Cancelled'];
+        var colors = ['#2ecc40', '#ffdc00', '#ff4136'];
+        var dataEmp = [];
+        for (var i = 0; i < statusLabels.length; i++) {
+            var statusData = [];
+            for (var e = 0; e < empIds.length; e++) {
+                statusData.push(groupedEmp[empIds[e]][i]);
+            }
+            dataEmp.push({
+                x: empIds,
+                y: statusData,
+                name: statusLabels[i],
+                type: 'bar',
+                marker: {color: colors[i]}
+            });
+        }
+        Plotly.newPlot('groupedEmpChart', dataEmp, {
+            barmode: 'group',
+            title: 'Requests by Employee ID and Status',
+            legend: {orientation: 'h'}
+        });
+        // Pie Chart for Request Status
+        var pieLabels = {{ status_labels|tojson }};
+        var pieValues = {{ status_counts|tojson }};
+        Plotly.newPlot('statusPieChart', [{
+            labels: pieLabels,
+            values: pieValues,
+            type: 'pie',
+            marker: {colors: colors},
+            textinfo: 'label+percent',
+            insidetextorientation: 'radial'
+        }], {
+            title: 'Overall Request Status Distribution',
+            legend: {orientation: 'h'}
+        });
+        {% endif %}
+        // Attendance Chart for searched employee
+        {% if searched_employee and employee_attendance %}
+        var attDates = [];
+        var attStatus = [];
+        {% for row in employee_attendance %}
+            attDates.push("{{ row.date }}");
+            attStatus.push("{{ row.status }}" === "Present" ? 1 : 0);
+        {% endfor %}
+        Plotly.newPlot('employeeAttendanceChart', [{
+            x: attDates,
+            y: attStatus,
+            type: 'bar',
+            marker: {color: '#2ecc40'},
+            name: 'Present'
+        }], {
+            title: 'Attendance for Employee {{ searched_employee.employee_id }}',
+            xaxis: {title: 'Date'},
+            yaxis: {title: 'Present (1=Yes, 0=No)'}
+        });
+        {% endif %}
+        // Mini Performance Charts for Each Employee
+        {% if searched_employee %}
+        var perfData = [{{ searched_employee|tojson }}];
+        {% else %}
+        var perfData = {{ perf_data|tojson }};
+        {% endif %}
+        for (var i = 0; i < perfData.length; i++) {
+            var metrics = [perfData[i].task_completion_rate, perfData[i].hours_logged, perfData[i].contribution_score];
+            var labels = ['Completion', 'Hours', 'Contribution'];
+            var colors = ['#2ecc40', '#0074D9', '#ff4136'];
+            Plotly.newPlot('miniChart'+i, [{
+                x: labels,
+                y: metrics,
+                type: 'bar',
+                marker: {color: colors}
+            }], {
+                title: '',
+                margin: {t: 10, b: 20, l: 20, r: 20},
+                xaxis: {showticklabels: true},
+                yaxis: {showticklabels: true}
+            });
+        }
+    </script>
+</body>
+</html>

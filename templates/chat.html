@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Assistant</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 500px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        textarea { width: 100%; height: 80px; margin-top: 10px; }
+        button { margin-top: 10px; padding: 10px 20px; }
+        .answer { margin-top: 20px; background: #e9f7ef; padding: 15px; border-radius: 6px; }
+        .ref { font-size: 0.95em; color: #888; margin-top: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Chat Assistant ({{ role }})</h2>
+        <form method="POST">
+            <label for="question">Ask HR/Policy Question:</label>
+            <textarea name="question" required placeholder="e.g. What is my leave balance?"></textarea>
+            <button type="submit">Ask</button>
+        </form>
+        {% if answer %}
+        <div class="answer">
+            <strong>Answer:</strong><br>
+            {{ answer }}
+            {% if ref %}
+            <div class="ref">Reference: {{ ref }}</div>
+            {% endif %}
+        </div>
+        {% endif %}
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

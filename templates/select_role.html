@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Role</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 400px; margin: 100px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        select, button { width: 100%; padding: 10px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Select Your Role</h2>
+        <form method="POST">
+            <select name="role" required>
+                <option value="">-- Choose Role --</option>
+                {% for r in roles %}
+                <option value="{{ r }}">{{ r }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Enter</button>
+        </form>
+    </div>
+</body>
+</html>

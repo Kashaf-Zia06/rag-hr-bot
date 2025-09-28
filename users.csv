@@ -1,0 +1,5 @@
+name,email,password,role
+Kashaf Zia,kashaf123@gmail.com,50cb1597519ef8d8142cc8dc3fc4f81712e0afd72e1a7fcff735d50956ba0faa,Employee
+ali zia,ali123@gmail.com,25327680ef80c2afd9c353cfe28f2a7ae33845c1f90c5154fed480b7a3af08c7,Manager
+Sara Ali,sara.ali@examplecorp.local,1e139e4bad787f17faf60be8e9d12d4af7092bcafdaf835d9f2ed9ef291d571c,Employee
+Babar azam,babar@examplecorp.local,550d68068907f61f83d04af13371cb9556ce98ded21c7362fe75c589efbe7dc3,Employee

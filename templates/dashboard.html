@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ role }} Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 500px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        .features { margin-top: 30px; }
+        .features a { display: block; margin: 10px 0; color: #007bff; text-decoration: none; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ role }}</h2>
+        <div class="features">
+            <a href="{{ url_for('chat') }}">Chat Assistant</a>
+            <a href="{{ url_for('attendance') }}">Attendance</a>
+            <a href="{{ url_for('requests_page') }}">Requests</a>
+            {% if role in ['Manager', 'HR', 'Director'] %}
+            <a href="{{ url_for('approvals') }}">Approvals</a>
+            {% endif %}
+            {% if role in ['Manager', 'HR', 'Director'] %}
+            <a href="{{ url_for('analytics') }}">Analytics & Reporting</a>
+            {% endif %}
+            <a href="{{ url_for('select_role') }}">Change Role</a>
+        </div>
+    </div>
+</body>
+</html>

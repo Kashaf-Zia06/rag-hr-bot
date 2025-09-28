@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Requests - HR View</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 900px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>All Requests (HR View)</h2>
+        <table>
+            <tr>
+                <th>Employee Email</th>
+                <th>Request Details</th>
+                <th>Classified Type</th>
+                <th>Status</th>
+                <th>Current Approver</th>
+            </tr>
+            {% for req in all_requests %}
+            <tr>
+                <td>{{ req.email }}</td>
+                <td>{{ req.details }}</td>
+                <td>{{ req.classified_type }}</td>
+                <td>{{ req.status }}</td>
+                <td>{{ req.approver }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

@@ -87,5 +87,35 @@ Context:
     print("CITED SOURCES (filenames):")
     print(", ".join(citations))
 
+def retrieve_hr_answer(question, k=6):
+    import faiss, pickle
+    index_path = 'utils/vectorstore/index.faiss'
+    meta_path = 'utils/vectorstore/index.faiss.meta.pkl'
+    index = faiss.read_index(index_path)
+    with open(meta_path, 'rb') as f:
+        docs = pickle.load(f)
+    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+    qemb = model.encode([question], convert_to_numpy=True)
+    faiss.normalize_L2(qemb)
+    D, I = index.search(qemb, k)
+    I = I[0]
+    seen = set()
+    context_blocks = []
+    citations = []
+    for idx in I:
+        if idx < 0:
+            continue
+        src = docs[idx]['meta'].get('source', 'unknown')
+        key = (src,)
+        if key in seen:
+            continue
+        seen.add(key)
+        context_blocks.append(f"[Source: {src}]\n{docs[idx]['text']}")
+        citations.append(src)
+    context = "\n\n---\n\n".join(context_blocks[:k])
+    prompt = f"You are an HR assistant for an internal system.\nAnswer the user's question using ONLY the following context. Cite the sources by filename in brackets like [source: filename].\nIf the answer isn't contained in the context, say 'I don't know based on the indexed policies/data.'\n\nQuestion: {question}\n\nContext:\n{context}\n"
+    answer = call_llm(prompt)
+    return answer, citations
+
 if __name__ == "__main__":
     main()
