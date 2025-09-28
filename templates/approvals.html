@@ -4,16 +4,173 @@
     <meta charset="UTF-8">
     <title>Approvals</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; }
-        .container { max-width: 500px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        h2 { color: #333; }
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { color: #333; margin-bottom: 30px; }
+        .request-card { 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            position: relative;
+        }
+        .request-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+        }
+        .request-type { 
+            background: #007bff; 
+            color: white; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 0.9em; 
+            text-transform: capitalize;
+        }
+        .request-status { 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 0.9em; 
+        }
+        .status-pending { 
+            background: #ffc107; 
+            color: #212529; 
+        }
+        .status-approved { 
+            background: #28a745; 
+            color: white; 
+        }
+        .status-disapproved { 
+            background: #dc3545; 
+            color: white; 
+        }
+        .request-details { 
+            margin-bottom: 15px; 
+            line-height: 1.6; 
+        }
+        .request-meta { 
+            color: #666; 
+            font-size: 0.9em; 
+            margin-bottom: 15px; 
+        }
+        .action-buttons { 
+            display: flex; 
+            gap: 10px; 
+        }
+        .btn { 
+            padding: 8px 16px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 0.9em; 
+            transition: background-color 0.3s;
+        }
+        .btn-approve { 
+            background: #28a745; 
+            color: white; 
+        }
+        .btn-approve:hover { 
+            background: #218838; 
+        }
+        .btn-disapprove { 
+            background: #dc3545; 
+            color: white; 
+        }
+        .btn-disapprove:hover { 
+            background: #c82333; 
+        }
+        .no-requests { 
+            text-align: center; 
+            color: #666; 
+            font-style: italic; 
+            padding: 40px; 
+        }
+        .back-link { 
+            display: inline-block; 
+            margin-bottom: 20px; 
+            color: #007bff; 
+            text-decoration: none; 
+        }
+        .back-link:hover { 
+            text-decoration: underline; 
+        }
+        .success-message { 
+            background: #d4edda; 
+            color: #155724; 
+            padding: 10px; 
+            border-radius: 4px; 
+            margin-bottom: 20px; 
+        }
+        .error-message { 
+            background: #f8d7da; 
+            color: #721c24; 
+            padding: 10px; 
+            border-radius: 4px; 
+            margin-bottom: 20px; 
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Approvals ({{ role }})</h2>
-        <p>Approval features coming soon.</p>
-        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+        <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+        <h2>HR Requests Management</h2>
+        
+        {% if message %}
+        <div class="success-message">{{ message }}</div>
+        {% endif %}
+        
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        
+        {% if all_requests %}
+            {% for request in all_requests %}
+            <div class="request-card">
+                <div class="request-header">
+                    <span class="request-type">{{ request.classified_type }}</span>
+                    <span class="request-status status-{{ request.status.lower() }}">{{ request.status }}</span>
+                </div>
+                
+                <div class="request-details">
+                    <strong>Request Details:</strong><br>
+                    {{ request.details }}
+                </div>
+                
+                <div class="request-meta">
+                    <strong>Employee:</strong> {{ request.email }}<br>
+                    <strong>Current Approver:</strong> {{ request.approver }}<br>
+                    <strong>Submitted:</strong> {{ request.timestamp }}
+                </div>
+                
+                {% if 'Pending' in request.status %}
+                <div class="action-buttons">
+                    <form method="post" style="display: inline;">
+                        <input type="hidden" name="action" value="approve">
+                        <input type="hidden" name="request_id" value="{{ request.id }}">
+                        <button type="submit" class="btn btn-approve" onclick="return confirm('Are you sure you want to approve this request?')">
+                            ✅ Approve
+                        </button>
+                    </form>
+                    
+                    <form method="post" style="display: inline;">
+                        <input type="hidden" name="action" value="disapprove">
+                        <input type="hidden" name="request_id" value="{{ request.id }}">
+                        <button type="submit" class="btn btn-disapprove" onclick="return confirm('Are you sure you want to disapprove this request?')">
+                            ❌ Disapprove
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-requests">
+                <h3>No requests found</h3>
+                <p>No requests have been submitted yet.</p>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>

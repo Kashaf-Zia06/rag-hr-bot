@@ -5,32 +5,54 @@
     <title>Chat Assistant</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f4f4; }
-        .container { max-width: 500px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .container { max-width: 600px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         h2 { color: #333; }
-        textarea { width: 100%; height: 80px; margin-top: 10px; }
-        button { margin-top: 10px; padding: 10px 20px; }
+        textarea { width: 100%; height: 80px; margin-top: 10px; border: 1px solid #ddd; border-radius: 4px; padding: 10px; }
+        button { margin-top: 10px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
         .answer { margin-top: 20px; background: #e9f7ef; padding: 15px; border-radius: 6px; }
-        .ref { font-size: 0.95em; color: #888; margin-top: 8px; }
+        .ref { font-size: 0.9em; color: #666; margin-top: 15px; padding-top: 10px; border-top: 1px solid #ddd; }
+        .loading { display: none; margin-top: 20px; text-align: center; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #007bff; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { color: #666; font-style: italic; }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Chat Assistant ({{ role }})</h2>
-        <form method="POST">
+        <form method="POST" id="chatForm">
             <label for="question">Ask HR/Policy Question:</label>
-            <textarea name="question" required placeholder="e.g. What is my leave balance?"></textarea>
-            <button type="submit">Ask</button>
+            <textarea name="question" id="question" required placeholder="e.g. What is my leave balance?"></textarea>
+            <button type="submit" id="submitBtn">Ask</button>
         </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Generating answer...</div>
+        </div>
+        
         {% if answer %}
         <div class="answer">
             <strong>Answer:</strong><br>
             {{ answer }}
-            {% if ref %}
-            <div class="ref">Reference: {{ ref }}</div>
-            {% endif %}
         </div>
+        {% if ref %}
+        <div class="ref">
+            <strong>References:</strong> {{ ref }}
+        </div>
+        {% endif %}
         {% endif %}
         <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
     </div>
+
+    <script>
+        document.getElementById('chatForm').addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').textContent = 'Processing...';
+        });
+    </script>
 </body>
 </html>

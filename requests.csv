@@ -1,12 +1,28 @@
 email,req_type,details,status
-kashaf123@gmail.com,Leave,I want leave for 2 days as i am sick,Pending
-sara.ali@examplecorp.local,Overtime,i want pay for overtime on friday night.,Pending
+kashaf123@gmail.com,Leave,I want leave for 2 days as i am sick,Approved,HR
+sara.ali@examplecorp.local,Overtime,i want pay for overtime on friday night.,Approved,HR
 babar@examplecorp.local,Leave,I want 2 days leave,Pending
-sara.malik@examplecorp.local,Leave,I want 2 days leave,Pending (Manager > HR)
+sara.malik@examplecorp.local,Leave,I want 2 days leave,Disapproved,HR
 saad.ahmed@examplecorp.local,I want to go abroad thats why i want one week off.,other,Pending (),HR
-sara.shah@examplecorp.local,I need to go out of city due to family emergency.I want 2 days leave.,leave,Pending (Manager > HR),Manager
+sara.shah@examplecorp.local,I need to go out of city due to family emergency.I want 2 days leave.,leave,Approved,Manager
 nimra.khan@examplecorp.local,I m facing some serious financial issues that why i need some loan amount of 10000.,other,Pending (),HR
 saad.ahmed@examplecorp.local,I need to go abroad in emergency due to my close friend's death so i need one week off.,other,Pending (),HR
-hiba.butt@examplecorp.local,I want leave for one week.,other,Pending (),HR
+hiba.butt@examplecorp.local,I want leave for one week.,other,Approved,HR
+saad.ahmed@examplecorp.local,I need to go hospital in emergency.I want 3 days leave.,other,Approved,HR
 saad.ahmed@examplecorp.local,I need to go hospital in emergency.I want 3 days leave.,other,Pending (),HR
-saad.ahmed@examplecorp.local,I need to go hospital in emergency.I want 3 days leave.,other,Pending (),HR
+saad.ahmed@examplecorp.local,I want 3 days leave.,other,Pending (),HR
+saad.ahmed@examplecorp.local,I am going abroad i want 3 days leave.,other,Pending (),HR
+rabia.butt@examplecorp.local,I want one week leave.,other,Pending (),HR
+rabia.butt@examplecorp.local,I want to travel out of city due to medical emergency. I want three days off.,leave,Pending (Manager > HR),Manager
+anas.shah@examplecorp.local,I want to go out of city due to medical emergency. I want 3 days leave.,leave,Pending (Manager > HR),Manager
+laiba.qureshi@examplecorp.local,I want loan of 10,000 amount due to medical emergency.,leave,Pending (Manager > HR),Manager
+rabia.butt@examplecorp.local,I want loan of 10,000 amount due to medical emergency.,other,Pending (),HR
+rabia.butt@examplecorp.local,I want loan of 10000 amount due to medical emergency,other,Pending (),HR
+rabia.butt@examplecorp.local,i want to claim overtime hours.,other,Pending (),HR
+rabia.butt@examplecorp.local,i want to claim my extra hours pay.,other,Pending (),HR
+rabia.butt@examplecorp.local,I want to claim my extra hours pay.,other,Pending (),HR
+rabia.butt@examplecorp.local,I want to travel out of city due to medical emergency. I want three days off.,other,Pending (),HR
+rabia.butt@examplecorp.local,I want to travel out of city due to medical emergency. I want three days off.,leave,Pending (Manager > HR),Manager
+rabia.butt@examplecorp.local,i want to claim my extra hours pay.,overtime,Pending (Manager > HR),Manager
+rabia.butt@examplecorp.local,I want to claim travel expenses.,expense,Pending (Manager > Manager > Director),Manager
+hiba.butt@examplecorp.local,I want to claim travel expense.,expense,Pending (Manager > Manager > Director),Manager

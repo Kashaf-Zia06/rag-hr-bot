@@ -20,15 +20,40 @@
 <body>
     <div class="container">
         <h2>Submit a Request</h2>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 20px; border-left: 4px solid #0074D9;">
+            <h4 style="margin: 0 0 10px 0; color: #0074D9;">🤖 AI-Powered Request Classification</h4>
+            <p style="margin: 5px 0; font-size: 0.9em; color: #666;">Our advanced AI model automatically classifies your request into categories like leave, expense, attendance, overtime, promotion, transfer, resignation, travel, loan, or other. Just describe your request in natural language!</p>
+        </div>
         {% if message %}<div class="info">{{ message }}</div>{% endif %}
-        <form method="post">
+        <form method="post" id="requestForm">
             <label for="details">Request Details:</label>
-            <textarea name="details" id="details" rows="4" required></textarea>
-            <button type="submit">Submit Request</button>
+            <textarea name="details" id="details" rows="4" required placeholder="Describe your request in detail. The system will automatically classify it (e.g., 'I need 3 days off for a family emergency', 'I want to claim travel expenses', or 'I need a loan of 10,000 for medical emergency')"></textarea>
+            <button type="submit" id="submitBtn">Submit Request</button>
         </form>
+        
+        <div class="loading" id="loading" style="display: none; text-align: center; margin: 20px 0;">
+            <div style="border: 3px solid #f3f3f3; border-top: 3px solid #0074D9; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 10px;"></div>
+            <div style="color: #666; font-style: italic;">AI is analyzing and classifying your request...</div>
+        </div>
+        
+        <style>
+            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        </style>
+        
+        <script>
+            document.getElementById('requestForm').addEventListener('submit', function() {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('submitBtn').disabled = true;
+                document.getElementById('submitBtn').textContent = 'Processing...';
+            });
+        </script>
         {% if classified_type %}
-        <div class="info">Classified Type: <b>{{ classified_type }}</b></div>
-        <div class="info">Current Approver: <b>{{ approver }}</b></div>
+        <div class="info" style="background: #e8f5e8; padding: 15px; border-radius: 6px; border-left: 4px solid #28a745;">
+            <h4 style="margin: 0 0 10px 0; color: #155724;">✅ Request Classified Successfully!</h4>
+            <p style="margin: 5px 0;"><strong>Type:</strong> <span style="background: #d4edda; padding: 4px 8px; border-radius: 4px; text-transform: capitalize;">{{ classified_type }}</span></p>
+            <p style="margin: 5px 0;"><strong>Approval Chain:</strong> {{ approver }}</p>
+            <p style="margin: 5px 0; font-size: 0.9em; color: #666;">Your request has been automatically categorized and routed to the appropriate approver.</p>
+        </div>
         {% endif %}
         <h3>Your Requests</h3>
         <table>

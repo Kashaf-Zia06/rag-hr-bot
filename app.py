@@ -7,6 +7,9 @@ import hashlib
 import re
 import requests
 from dotenv import load_dotenv
+import requests
+import json
+import re
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -80,65 +83,79 @@ def classify_request(details):
     Classify request using Groq model API.
     Returns: category string (leave, expense, attendance, overtime, promotion, transfer, resignation, travel, other)
     """
-    if not GROQ_API_KEY or not GROQ_MODEL:
-        return 'other'
-    url = 'https://api.groq.com/v1/chat/completions'
-    headers = {
-        'Authorization': f'Bearer {GROQ_API_KEY}',
-        'Content-Type': 'application/json'
-    }
-    prompt = (
-        "Classify the following HR request into one of these categories: leave, expense, attendance, overtime, promotion, transfer, resignation, travel, other.\n"
-        "Examples:\n"
-        "- 'I need to go abroad for a week due to a family emergency.' => leave\n"
-        "- 'I need one week off for bereavement.' => leave\n"
-        "- 'I am sick and need 3 days off.' => leave\n"
-        "- 'I want to claim travel expenses.' => expense\n"
-        "- 'I worked overtime last week.' => overtime\n"
-        "- 'I want to resign.' => resignation\n"
-        "- 'I need to transfer to another department.' => transfer\n"
-        f"Request: {details}\nCategory:"
-    )
-    data = {
-        "model": GROQ_MODEL,
-        "messages": [
-            {"role": "user", "content": prompt}
-        ],
-        "max_tokens": 10,
-        "temperature": 0.0
-    }
+    # Check if Groq API is available
     try:
-        response = requests.post(url, headers=headers, json=data, timeout=10)
-        response.raise_for_status()
-        result = response.json()
-        # Log response to file for debugging
-        with open('groq_api.log', 'a') as logf:
-            logf.write(f"Groq API response: {result}\n")
-        if not result or not isinstance(result, dict):
-            with open('groq_api.log', 'a') as logf:
-                logf.write(f"Groq API response is not a dict: {result}\n")
+        if not GROQ_API_KEY or not GROQ_MODEL:
             return 'other'
-        choices = result.get('choices')
-        if not choices or not isinstance(choices, list) or not choices[0]:
-            with open('groq_api.log', 'a') as logf:
-                logf.write(f"Groq API missing choices: {result}\n")
-            return 'other'
-        message = choices[0].get('message')
-        if not message or not isinstance(message, dict) or 'content' not in message:
-            with open('groq_api.log', 'a') as logf:
-                logf.write(f"Groq API missing message content: {result}\n")
-            return 'other'
-        category = message['content'].strip().lower()
-        valid_categories = ['leave', 'expense', 'attendance', 'overtime', 'promotion', 'transfer', 'resignation', 'travel', 'other']
-        for cat in valid_categories:
-            if cat in category:
-                return cat
-        with open('groq_api.log', 'a') as logf:
-            logf.write(f"Groq API returned unexpected category: {category}\n")
+    except NameError:
         return 'other'
+
+    # Use the same Groq client as the chatbot
+    from groq import Groq
+    try:
+        client = Groq(api_key="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")
+        
+        system_prompt = (
+            "You are an HR request classifier. Your SOLE output MUST be a JSON object "
+            "with a single key named 'category'. The value must be ONE of these exact words: "
+            "leave, expense, attendance, overtime, promotion, transfer, resignation, travel, loan, other.\n\n"
+            "Classification guidelines:\n"
+            "- leave: time off, vacation, sick days, absence, holidays\n"
+            "- expense: reimbursement, claims, travel costs, meals, accommodation\n"
+            "- attendance: late arrival, early departure, check-in/out issues\n"
+            "- overtime: extra hours, weekend work, after-hours work, overtime pay, extra hours pay\n"
+            "- promotion: career advancement, salary increase, raise\n"
+            "- transfer: department change, relocation, move to different role\n"
+            "- resignation: quitting, leaving job, termination\n"
+            "- travel: business trips, conferences, work-related travel\n"
+            "- loan: financial assistance, advance salary, emergency funds\n"
+            "- other: anything that doesn't fit the above categories\n\n"
+            "Examples:\n"
+            "- 'I want to claim my extra hours pay' → overtime\n"
+            "- 'I need a loan of 10,000' → loan\n"
+            "- 'I want 3 days off' → leave"
+        )
+        user_prompt = f"Request to classify: {details}"
+
+        response = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            response_format={"type": "json_object"},
+            max_tokens=50,
+            temperature=0.0
+        )
+        
+        result = response.choices[0].message.content.strip()
+        print(f"DEBUG: Raw API response: {result}")
+        
+        # Parse JSON response
+        import json
+        try:
+            parsed_data = json.loads(result)
+            category = parsed_data.get('category', '').strip().lower()
+            print(f"DEBUG: Parsed category: {category}")
+            
+            # Validate category
+            valid_categories = ['leave', 'expense', 'attendance', 'overtime', 'promotion', 'transfer', 'resignation', 'travel', 'loan', 'other']
+            if category in valid_categories:
+                return category
+            else:
+                print(f"DEBUG: Invalid category '{category}', returning 'other'")
+                return 'other'
+                
+        except json.JSONDecodeError as je:
+            print(f"DEBUG: JSON decode error: {je}")
+            return 'other'
+            
     except Exception as e:
-        with open('groq_api.log', 'a') as logf:
+        # Log error but continue with fallback
+        with open('groq_classification.log', 'a') as logf:
             logf.write(f"Groq classification error: {e}\n")
+        print(f"DEBUG: Classification failed with error: {e}")
+        print(f"DEBUG: Request details: {details}")
         return 'other'
 
 def validate_leave_policy(req_type, details):
@@ -302,7 +319,10 @@ def requests_page():
                     approver = 'HR'
                 if user and email == user['email']:
                     requests_list.append({'details': details, 'classified_type': classified_type, 'status': status, 'approver': approver})
-    return render_template('requests.html', role=role, requests_list=requests_list, message=message, classified_type=classified_type, approver=approver)
+    
+    # Only show success box if a request was just submitted
+    show_success = request.method == 'POST' and classified_type is not None
+    return render_template('requests.html', role=role, requests_list=requests_list, message=message, classified_type=classified_type if show_success else None, approver=approver if show_success else None)
 
 @app.route('/hr_requests')
 def hr_requests():
@@ -323,10 +343,83 @@ def hr_requests():
                 all_requests.append({'email': email, 'details': details, 'classified_type': classified_type, 'status': status, 'approver': approver})
     return render_template('hr_requests.html', role=role, all_requests=all_requests)
 
-@app.route('/approvals')
+@app.route('/approvals', methods=['GET', 'POST'])
 def approvals():
     role = session.get('role')
-    return render_template('approvals.html', role=role)
+    if role != 'HR':
+        return redirect(url_for('dashboard'))
+    
+    message = None
+    error = None
+    
+    if request.method == 'POST':
+        action = request.form.get('action')
+        request_id = request.form.get('request_id')
+        
+        if action and request_id:
+            # Update request status in CSV
+            if os.path.exists(REQUESTS_CSV):
+                # Read all requests
+                requests_data = []
+                with open(REQUESTS_CSV, 'r') as f:
+                    lines = f.readlines()
+                
+                # Process each line
+                for i, line in enumerate(lines):
+                    if line.startswith('email,'):
+                        requests_data.append(line)
+                        continue
+                    
+                    parts = line.strip().split(',', 4)
+                    if len(parts) >= 4:
+                        email, details, classified_type, status, approver = parts[0], parts[1], parts[2], parts[3], parts[4] if len(parts) > 4 else 'HR'
+                        
+                        # Check if this is the request to update
+                        if str(i) == request_id:
+                            if action == 'approve':
+                                new_status = 'Approved'
+                                message = f"Request approved successfully!"
+                            elif action == 'disapprove':
+                                new_status = 'Disapproved'
+                                message = f"Request disapproved."
+                            else:
+                                error = "Invalid action"
+                                break
+                            
+                            requests_data.append(f"{email},{details},{classified_type},{new_status},{approver}\n")
+                        else:
+                            requests_data.append(line)
+                
+                # Write back to CSV
+                with open(REQUESTS_CSV, 'w') as f:
+                    f.writelines(requests_data)
+            else:
+                error = "No requests file found"
+    
+    # Load all requests for HR
+    all_requests = []
+    if os.path.exists(REQUESTS_CSV):
+        with open(REQUESTS_CSV, 'r') as f:
+            for i, line in enumerate(f):
+                if line.startswith('email,'):
+                    continue
+                
+                parts = line.strip().split(',', 4)
+                if len(parts) >= 4:
+                    email, details, classified_type, status, approver = parts[0], parts[1], parts[2], parts[3], parts[4] if len(parts) > 4 else 'HR'
+                    
+                    # Show all requests (pending, approved, disapproved)
+                    all_requests.append({
+                        'id': i,
+                        'email': email,
+                        'details': details,
+                        'classified_type': classified_type,
+                        'status': status,
+                        'approver': approver,
+                        'timestamp': 'Recently'  # You can add actual timestamp if needed
+                    })
+    
+    return render_template('approvals.html', role=role, all_requests=all_requests, message=message, error=error)
 
 @app.route('/analytics', methods=['GET', 'POST'])
 def analytics():

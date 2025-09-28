@@ -17,8 +17,12 @@
         <div class="features">
             <a href="{{ url_for('chat') }}">Chat Assistant</a>
             <a href="{{ url_for('attendance') }}">Attendance</a>
+            {% if role != 'HR' %}
             <a href="{{ url_for('requests_page') }}">Requests</a>
-            {% if role in ['Manager', 'HR', 'Director'] %}
+            {% endif %}
+            {% if role == 'HR' %}
+            <a href="{{ url_for('approvals') }}">Requests</a>
+            {% elif role in ['Manager', 'Director'] %}
             <a href="{{ url_for('approvals') }}">Approvals</a>
             {% endif %}
             {% if role in ['Manager', 'HR', 'Director'] %}
